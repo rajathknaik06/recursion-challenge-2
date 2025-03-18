@@ -1,0 +1,59 @@
+""" Emerson, a budding mathematician, is intrigued by the Fibonacci sequence and its relationship to matrix exponentiation. He needs to efficiently compute the nth Fibonacci number modulo m using matrix exponentiation techniques to handle large values of n. 
+
+
+
+Help him by implementing the calculation and providing the correct Fibonacci number for given inputs.
+
+Input format :
+The input consists of two space-separated integers: n and m.
+
+The integer n represents the exponent to which the matrix needs to be raised, and m is the modulus value.
+
+Output format :
+The output is a single integer representing the value of the matrix power modulo m."""
+
+
+def pow():
+    global result, m
+    temp = [[0]*2 for _ in range(2)]
+    for i in range(2):
+        for j in range(2):
+            temp[i][j] = ((result[i][0] * result[0][j]) + (result[i][1] * result[1][j])) % m
+    result = temp
+
+def pow_with_base():
+    global result, m, base
+    temp = [[0]*2 for _ in range(2)]
+    for i in range(2):
+        for j in range(2):
+            temp[i][j] = ((result[i][0] * base[0][j]) + (result[i][1] * base[1][j])) % m
+    result = temp
+
+def pow_matrix(n):
+    global result
+    if n == 0 or n == 1:
+        return
+    pow_matrix(n // 2)
+    pow()
+    if n % 2 == 1:
+        pow_with_base()
+
+def calculate_matrix(n):
+    global result, m
+    total = 0
+    if n == 0:
+        total = 0
+    else:
+        pow_matrix(n - 1)
+        total = (result[0][0] * 2) % m
+    return total
+
+def reset():
+    global result
+    result = [[1, 1], [1, 0]]
+
+if __name__ == "__main__":
+    reset()
+    n, m = map(int, input().split())
+    base = [[1, 1], [1, 0]]  # Define base matrix here
+    print(calculate_matrix(n))
